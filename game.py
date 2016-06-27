@@ -10,8 +10,11 @@ screen = pygame.display.set_mode(size)
 
 speed = [0,0]
 pos = [300,400]
-imageLoc = "./images/shooter.png"
-shooter = Shooter(speed, imageLoc, pos)
+imageLocation = "./images/shooter.png"
+shooter = Shooter(speed, imageLocation, pos, width, height)
+
+GameObjects = []
+GameObjects.append(shooter)
 
 while 1:
     for event in pygame.event.get():
@@ -25,17 +28,21 @@ while 1:
                 speed[0] = 1
             elif event.key == pygame.K_LEFT:
                 speed[0] = -1
-        #if event.type == pygame.KEYUP:
-        #    speed = [0,0]
+            elif event.key == pygame.K_SPACE:
+                GameObjects.append(shooter.shoot())
+        if event.type == pygame.KEYUP:
+            speed = [0,0]
 
     shooter.updateSpeed(speed)
-    shooter.moveRect()
 
-    #if shooterrect.left < 0 or shooterrect.right > width:
-    #    speed[0] = 0 #-speed[0]
-    #if shooterrect.top < 0 or shooterrect.bottom > height:
-    #    speed[1] = 0 #-speed[1]
+    # Move everything in the game
+    for GameObject in GameObjects:
+        GameObject.move()
 
     screen.fill(black)
-    screen.blit(shooter.image, shooter.rect)
+
+    # Draw all the game objects on the screen in their new positions
+    for GameObject in GameObjects:
+        screen.blit(GameObject.image, GameObject.rect)
+
     pygame.display.flip()
