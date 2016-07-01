@@ -35,11 +35,14 @@ while 1:
 
     shooter.updateSpeed(speed)
 
-    # Move everything in the game
+    # Move everything in the game (referring to the underlying positions of game objects)
     for GameObject in GameObjects:
         GameObject.move()
 
     screen.fill(black)
+
+    # If any game object has left the screen then remove it
+    GameObjects[:] = [GameObject for GameObject in GameObjects if GameObject.withinScreen()]
 
     # Draw all the game objects on the screen in their new positions
     for GameObject in GameObjects:

@@ -18,11 +18,19 @@ class Shooter:
     def move(self):
         self.rect = self.rect.move(self.speed)
         newSpeed = list(self.speed)
-        # Can't move off the screen
-        if self.rect.left < 0 or self.rect.right > self.screenWidth:
-            newSpeed[0] = 0
-        if self.rect.top < 0 or self.rect.bottom > self.screenHeight:
-            newSpeed[1] = 0
+        # Stop shooter from moving off of the screen
+        if self.rect.left <= 0:
+            self.rect.left = 0
+
+        if self.rect.right >= self.screenWidth:
+            self.rect.right = self.screenWidth
+
+        if self.rect.top <= 0:
+            self.rect.top = 0
+
+        if self.rect.bottom >= self.screenHeight:
+            self.rect.bottom = self.screenHeight
+
         self.updateSpeed(newSpeed)
 
     # Creates a new laser object that will fly across the screen
@@ -32,3 +40,6 @@ class Shooter:
         laserPos = [self.rect.x,self.rect.y]
         laser = Laser(laserSpeed, laserImage, laserPos, self.screenWidth, self.screenHeight)
         return laser
+
+    def withinScreen(self):
+        return True

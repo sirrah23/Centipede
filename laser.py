@@ -13,3 +13,6 @@ class Laser:
 
     def move(self):
         self.rect = self.rect.move(self.speed)
+
+    def withinScreen(self):
+        return self.rect.x >= 0 and self.rect.x <= self.screenWidth and self.rect.y >= 0 and self.rect.y <= self.screenHeight
