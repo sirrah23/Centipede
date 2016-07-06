@@ -1,5 +1,6 @@
 import sys, pygame
 from shooter import Shooter
+from centipedehead import CentipedeHead
 
 pygame.init()
 
@@ -13,8 +14,11 @@ pos = [300,400]
 imageLocation = "./images/shooter.png"
 shooter = Shooter(speed, imageLocation, pos, width, height)
 
+centipedeHead = CentipedeHead([-1,0],[800,0], width, height)
+
 GameObjects = []
 GameObjects.append(shooter)
+GameObjects.append(centipedeHead)
 
 while 1:
     for event in pygame.event.get():
