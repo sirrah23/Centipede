@@ -1,8 +1,9 @@
 import pygame, sys
 
-class Laser:
+class Laser(pygame.sprite.Sprite):
 
     def __init__(self, speed, image, pos, width, height):
+        super(Laser,self).__init__()
         self.speed = speed
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()

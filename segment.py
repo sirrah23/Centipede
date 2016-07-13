@@ -1,8 +1,9 @@
 import pygame,sys
 
-class Segment:
+class Segment(pygame.sprite.Sprite):
 
     def __init__(self, speed, image, pos, width, height):
+        super(Segment,self).__init__()
         self.speed = speed
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()

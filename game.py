@@ -16,9 +16,19 @@ shooter = Shooter(speed, imageLocation, pos, width, height)
 
 centipedeHead = CentipedeHead([-1,0],[800,0], width, height)
 
+allSpriteGroup = pygame.sprite.Group()
+
 GameObjects = []
 GameObjects.append(shooter)
+allSpriteGroup.add(shooter)
 GameObjects.append(centipedeHead)
+allSpriteGroup.add(centipedeHead)
+
+# A group containing all of the lasers the Shooter shoots
+laserGroup = pygame.sprite.Group()
+centipedeSegmentGroup = pygame.sprite.Group()
+
+centipedeSegmentGroup.add(centipedeHead)
 
 while 1:
     for event in pygame.event.get():
@@ -33,7 +43,10 @@ while 1:
             elif event.key == pygame.K_LEFT:
                 speed[0] = -1
             elif event.key == pygame.K_SPACE:
-                GameObjects.append(shooter.shoot())
+                temp = shooter.shoot()
+                GameObjects.append(temp)
+                laserGroup.add(temp)
+                allSpriteGroup.add(temp)
         if event.type == pygame.KEYUP:
             speed = [0,0]
 
@@ -51,5 +64,7 @@ while 1:
     # Draw all the game objects on the screen in their new positions
     for GameObject in GameObjects:
         screen.blit(GameObject.image, GameObject.rect)
+
+    print pygame.sprite.groupcollide(laserGroup, centipedeSegmentGroup, False, False)
 
     pygame.display.flip()
