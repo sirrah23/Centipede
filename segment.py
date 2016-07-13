@@ -40,7 +40,7 @@ class Segment(pygame.sprite.Sprite):
     def updateSpeed(self, speed):
         self.speed = speed
 
-    def move(self):
+    def update(self):
         newSpeed = self.computeNewSpeed()
         # We changed directions
         if newSpeed[0] != self.speed[0]:
@@ -58,6 +58,3 @@ class Segment(pygame.sprite.Sprite):
         # Get new rect from rotated image
         self.rect = self.image.get_rect()
         self.rect.center = oldCenter
-
-    def withinScreen(self):
-        return True

@@ -12,7 +12,10 @@ class Laser(pygame.sprite.Sprite):
         self.screenWidth = width
         self.screenHeight = height
 
-    def move(self):
+    def update(self):
+        if not self.withinScreen():
+            self.kill()
+            return
         self.rect = self.rect.move(self.speed)
 
     def withinScreen(self):

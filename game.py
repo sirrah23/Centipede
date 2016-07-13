@@ -1,3 +1,4 @@
+import itertools
 import sys, pygame
 from shooter import Shooter
 from centipedehead import CentipedeHead
@@ -9,10 +10,9 @@ black = 0, 0, 0
 
 screen = pygame.display.set_mode(size)
 
-speed = [0,0]
 pos = [300,400]
 imageLocation = "./images/shooter.png"
-shooter = Shooter(speed, imageLocation, pos, width, height)
+shooter = Shooter(imageLocation, pos, width, height)
 
 centipedeHead = CentipedeHead([-1,0],[800,0], width, height)
 
@@ -26,40 +26,33 @@ laserGroup = pygame.sprite.Group()
 centipedeSegmentGroup = pygame.sprite.Group()
 centipedeSegmentGroup.add(centipedeHead)
 
+# All the non player character sprites
+npcGroups = [laserGroup, centipedeSegmentGroup]
+
 while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                speed[1] = -1
-            elif event.key == pygame.K_DOWN:
-               speed[1] = 1
-            elif event.key == pygame.K_RIGHT:
-                speed[0] = 1
-            elif event.key == pygame.K_LEFT:
-                speed[0] = -1
-            elif event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE:
                 newLaser = shooter.shoot()
                 laserGroup.add(newLaser)
                 allSpriteGroup.add(newLaser)
-        if event.type == pygame.KEYUP:
-            speed = [0,0]
 
-    shooter.updateSpeed(speed)
+    pressedKeys = pygame.key.get_pressed()
+
+    shooter.update(pressedKeys)
 
     # Move everything in the game (referring to the underlying positions of game objects)
-    for gameSprite in allSpriteGroup:
-        gameSprite.move()
+    for gameSprite in list(itertools.chain(npcGroups)):
+        gameSprite.update()
 
     screen.fill(black)
-
-    # If any game object has left the screen then remove it
-    # TODO
 
     # Draw all the game objects on the screen in their new positions
     for gameSprite in allSpriteGroup:
         screen.blit(gameSprite.image, gameSprite.rect)
 
-    print pygame.sprite.groupcollide(laserGroup, centipedeSegmentGroup, False, False)
+    #TODO enhance collision logic
+    #print pygame.sprite.groupcollide(laserGroup, centipedeSegmentGroup, False, False)
 
     pygame.display.flip()
