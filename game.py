@@ -18,16 +18,12 @@ centipedeHead = CentipedeHead([-1,0],[800,0], width, height)
 
 allSpriteGroup = pygame.sprite.Group()
 
-GameObjects = []
-GameObjects.append(shooter)
 allSpriteGroup.add(shooter)
-GameObjects.append(centipedeHead)
 allSpriteGroup.add(centipedeHead)
 
 # A group containing all of the lasers the Shooter shoots
 laserGroup = pygame.sprite.Group()
 centipedeSegmentGroup = pygame.sprite.Group()
-
 centipedeSegmentGroup.add(centipedeHead)
 
 while 1:
@@ -43,27 +39,26 @@ while 1:
             elif event.key == pygame.K_LEFT:
                 speed[0] = -1
             elif event.key == pygame.K_SPACE:
-                temp = shooter.shoot()
-                GameObjects.append(temp)
-                laserGroup.add(temp)
-                allSpriteGroup.add(temp)
+                newLaser = shooter.shoot()
+                laserGroup.add(newLaser)
+                allSpriteGroup.add(newLaser)
         if event.type == pygame.KEYUP:
             speed = [0,0]
 
     shooter.updateSpeed(speed)
 
     # Move everything in the game (referring to the underlying positions of game objects)
-    for GameObject in GameObjects:
-        GameObject.move()
+    for gameSprite in allSpriteGroup:
+        gameSprite.move()
 
     screen.fill(black)
 
     # If any game object has left the screen then remove it
-    GameObjects[:] = [GameObject for GameObject in GameObjects if GameObject.withinScreen()]
+    # TODO
 
     # Draw all the game objects on the screen in their new positions
-    for GameObject in GameObjects:
-        screen.blit(GameObject.image, GameObject.rect)
+    for gameSprite in allSpriteGroup:
+        screen.blit(gameSprite.image, gameSprite.rect)
 
     print pygame.sprite.groupcollide(laserGroup, centipedeSegmentGroup, False, False)
 
