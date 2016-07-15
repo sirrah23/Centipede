@@ -2,32 +2,30 @@ import itertools
 import sys, pygame
 from shooter import Shooter
 from centipedehead import CentipedeHead
+from centipedebody import CentipedeBody
+from centipede import Centipede
 
 pygame.init()
 
 size = width, height = 800, 600
 black = 0, 0, 0
-
 screen = pygame.display.set_mode(size)
 
 pos = [300,400]
 imageLocation = "./images/shooter.png"
-shooter = Shooter(imageLocation, pos, width, height)
 
-centipedeHead = CentipedeHead([-1,0],[800,0], width, height)
+shooter = Shooter(imageLocation, pos, width, height)
+centipede = Centipede([-1,0],[500,1], width, height, 13)
 
 allSpriteGroup = pygame.sprite.Group()
-
 allSpriteGroup.add(shooter)
-allSpriteGroup.add(centipedeHead)
+allSpriteGroup.add(centipede)
 
 # A group containing all of the lasers the Shooter shoots
 laserGroup = pygame.sprite.Group()
-centipedeSegmentGroup = pygame.sprite.Group()
-centipedeSegmentGroup.add(centipedeHead)
 
 # All the non player character sprites
-npcGroups = [laserGroup, centipedeSegmentGroup]
+npcGroups = [laserGroup, centipede]
 
 while 1:
     for event in pygame.event.get():
@@ -52,7 +50,6 @@ while 1:
     for gameSprite in allSpriteGroup:
         screen.blit(gameSprite.image, gameSprite.rect)
 
-    #TODO enhance collision logic
-    #print pygame.sprite.groupcollide(laserGroup, centipedeSegmentGroup, False, False)
+    pygame.sprite.groupcollide(laserGroup, centipede, True, True)
 
     pygame.display.flip()
