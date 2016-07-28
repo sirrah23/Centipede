@@ -1,16 +1,15 @@
 import itertools
 import sys, pygame
 from shooter import Shooter
-from centipedehead import CentipedeHead
 from centipedebody import CentipedeBody
 from centipede import Centipede
+from mushroom import Mushroom
 
 pygame.init()
 
 size = width, height = 800, 600
 black = 0, 0, 0
-screen = pygame.display.set_mode(size)
-
+screen = pygame.display.set_mode(size) 
 pos = [300,400]
 imageLocation = "./images/shooter.png"
 
@@ -23,9 +22,11 @@ allSpriteGroup.add(centipede)
 
 # A group containing all of the lasers the Shooter shoots
 laserGroup = pygame.sprite.Group()
+# A group containing all mushrooms in the game
+mushroomGroup = pygame.sprite.Group()
 
 # All the non player character sprites
-npcGroups = [laserGroup, centipede]
+npcGroups = [laserGroup, centipede, mushroomGroup]
 
 while 1:
     for event in pygame.event.get():
@@ -50,6 +51,16 @@ while 1:
     for gameSprite in allSpriteGroup:
         screen.blit(gameSprite.image, gameSprite.rect)
 
-    pygame.sprite.groupcollide(laserGroup, centipede, True, True)
+    # Deal with centipede segments that were shot
+    collisions = pygame.sprite.groupcollide(laserGroup, centipede, True, False)
+    segmentsHit = []
+    for laser in collisions:
+        segmentsHit.append(collisions[laser])
+    freshMushroom = centipede.damage([segment for segmentList in segmentsHit for segment in segmentList])
+
+    if freshMushroom != None:
+        mushroomGroup.add(freshMushroom)
+
+    allSpriteGroup.add(itertools.chain(npcGroups))
 
     pygame.display.flip()
