@@ -4,12 +4,25 @@ from shooter import Shooter
 from centipedebody import CentipedeBody
 from centipede import Centipede
 from mushroom import Mushroom
+from random import randrange
+
+
+def randomlyGenerateMushrooms(width, height):
+    ''' Returns a list of mushrooms that were randomly positioned on the board
+    given the width of the board, and the height of the board.'''
+    mushroomList = []
+    mushrooms = 45 #hardcoded for now...
+    for mushroom in range(mushrooms):
+        newX = randrange(0, width)
+        newY = randrange(0, height)
+        mushroomList.append(Mushroom([newX,newY]))
+    return mushroomList
 
 pygame.init()
 
 size = width, height = 800, 600
 black = 0, 0, 0
-screen = pygame.display.set_mode(size) 
+screen = pygame.display.set_mode(size)
 pos = [300,400]
 imageLocation = "./images/shooter.png"
 
@@ -24,6 +37,7 @@ allSpriteGroup.add(centipede)
 laserGroup = pygame.sprite.Group()
 # A group containing all mushrooms in the game
 mushroomGroup = pygame.sprite.Group()
+mushroomGroup.add(randomlyGenerateMushrooms(width, height))
 
 # All the non player character sprites
 npcGroups = [laserGroup, centipede, mushroomGroup]
@@ -64,6 +78,9 @@ while 1:
     # Deal with centipede segments that collide with mushrooms
     collisions = pygame.sprite.groupcollide(centipede, mushroomGroup, False, False)
     centipede.collide(collisions)
+
+    #Delete mushrooms that get shot
+    pygame.sprite.groupcollide(laserGroup, mushroomGroup, True, True)
 
     allSpriteGroup.add(itertools.chain(npcGroups))
 
