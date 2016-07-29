@@ -5,6 +5,7 @@ from centipedebody import CentipedeBody
 from centipede import Centipede
 from mushroom import Mushroom
 from random import randrange
+from enum import Enum
 
 
 def randomlyGenerateMushrooms(width, height):
@@ -25,6 +26,7 @@ black = 0, 0, 0
 screen = pygame.display.set_mode(size)
 pos = [300,400]
 imageLocation = "./images/shooter.png"
+Status = Enum('Status', 'win lose')
 
 shooter = Shooter(imageLocation, pos, width, height)
 centipede = Centipede([-1,0],[500,1], width, height, 13)
@@ -84,4 +86,22 @@ while 1:
 
     allSpriteGroup.add(itertools.chain(npcGroups))
 
+    if pygame.sprite.spritecollideany(shooter, centipede):
+        gameStatus = Status.lose
+        break
+
     pygame.display.flip()
+
+if gameStatus == Status.lose:
+    statusImage = pygame.image.load("./images/youlose.png")
+
+statusRect = statusImage.get_rect()
+statusRect.x = 75
+statusRect.y = 100
+screen.fill(black)
+screen.blit(statusImage, statusRect)
+pygame.display.flip()
+
+while 1:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: sys.exit()
