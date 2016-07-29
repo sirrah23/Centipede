@@ -44,3 +44,10 @@ class Centipede(pygame.sprite.Group):
         segmentToDelete.kill()
         return freshMushroom
 
+    def collide(self, collisions):
+        '''One or more parts of the centipede collided with something.
+        Now they must turn around and go the other way.
+        '''
+        for segment in collisions:
+            segment.collide()
+        return

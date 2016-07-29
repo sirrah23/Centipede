@@ -12,7 +12,7 @@ class Segment(pygame.sprite.Sprite):
         self.screenWidth = width
         self.screenHeight = height
         # Start with moving down
-        self.verticalDirection = 10
+        self.verticalDirection = 25
         # How fast do the centipede segments move left/right
         self.horizontalSpeed = 1
 
@@ -58,3 +58,8 @@ class Segment(pygame.sprite.Sprite):
         # Get new rect from rotated image
         self.rect = self.image.get_rect()
         self.rect.center = oldCenter
+
+    def collide(self):
+        '''Segment collided with something. Go the other way!'''
+        newSpeed = [-self.horizontalSpeed, self.verticalDirection]
+        self.updateSpeed(newSpeed)

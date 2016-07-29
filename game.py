@@ -61,6 +61,10 @@ while 1:
     if freshMushroom != None:
         mushroomGroup.add(freshMushroom)
 
+    # Deal with centipede segments that collide with mushrooms
+    collisions = pygame.sprite.groupcollide(centipede, mushroomGroup, False, False)
+    centipede.collide(collisions)
+
     allSpriteGroup.add(itertools.chain(npcGroups))
 
     pygame.display.flip()
