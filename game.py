@@ -86,6 +86,12 @@ while 1:
 
     allSpriteGroup.add(itertools.chain(npcGroups))
 
+    # Player killed the centipede!
+    if len(centipede) == 0:
+        gameStatus = Status.win
+        break
+
+    # Shooter was killed :(
     if pygame.sprite.spritecollideany(shooter, centipede):
         gameStatus = Status.lose
         break
@@ -94,6 +100,9 @@ while 1:
 
 if gameStatus == Status.lose:
     statusImage = pygame.image.load("./images/youlose.png")
+else:
+    statusImage = pygame.image.load("./images/youwin.png")
+
 
 statusRect = statusImage.get_rect()
 statusRect.x = 75
